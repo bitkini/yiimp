@@ -1,41 +1,41 @@
 <?php
+// —————————————————————————————————————————
+// 1) PHP errors & Yii debug (turn off in prod later)
+// —————————————————————————————————————————
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+define('YII_DEBUG',       true);
+define('YII_TRACE_LEVEL', 3);
 
-//define('YII_DEBUG', true);
+// —————————————————————————————————————————
+// 2) ensure we’re in the web root
+// —————————————————————————————————————————
+chdir(__DIR__);
 
-require_once('serverconfig.php');
-require_once('yaamp/defaultconfig.php');
-require_once('yaamp/ui/app.php');
+// —————————————————————————————————————————
+// 3) load your pool’s custom settings
+// —————————————————————————————————————————
+require_once __DIR__ . '/serverconfig.php';   // pool-specific UI settings
+require_once '/etc/yiimp/keys.php';          // DB + RPC credentials
 
-//$_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI'];
+// —————————————————————————————————————————
+// 4) load the Yii framework
+// —————————————————————————————————————————
+$yii = __DIR__ . '/framework/yii.php';
+if (!is_file($yii)) {
+    die("Error: Yii framework not found at <b>{$yii}</b>");
+}
+require_once $yii;
 
-// blacklist some search bots which ignore robots.txt (most in fact)
-$isbot = false; $agent = arraySafeVal($_SERVER,'HTTP_USER_AGENT','');
-if (strpos($agent, 'MJ12bot') || strpos($agent, 'DotBot') || strpos($agent, 'robot'))
-	$isbot = true;
-else if (strpos($agent, 'AhrefsBot') || strpos($agent, 'YandexBot') || strpos($agent, 'Googlebot'))
-	$isbot = true;
-
-if ($isbot) {
-	$url = arraySafeVal($_SERVER,'REQUEST_URI');
-	if (strpos($url, "explorer"))
-		throw new CHttpException(403,"You are not wanted on this server. see robots.txt");
-	die();
+// —————————————————————————————————————————
+// 5) load the Yiimp application config
+// —————————————————————————————————————————
+$config = __DIR__ . '/yaamp/config.php';
+if (!is_file($config)) {
+    die("Error: application config not found at <b>{$config}</b>");
 }
 
-try
-{
-	$app->run();
-}
-
-catch(CException $e)
-{
-//	Javascript("window.history.go(-1)");
-//	mydump($e, 3);
-
-	debuglog("front end error ".$_SERVER['REMOTE_ADDR']);
-	debuglog($e->getMessage());
-
-//	send_email_alert('frontend', "frontend error", "a frontend error occured");
-}
-
-
+// —————————————————————————————————————————
+// 6) start the application
+// —————————————————————————————————————————
+Yii::createWebApplication($config)->run();

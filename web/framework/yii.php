@@ -1,25 +1,19 @@
 <?php
 /**
  * Yii bootstrap file.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @link http://www.yiiframework.com/
- * @copyright 2008-2013 Yii Software LLC
- * @license http://www.yiiframework.com/license/
  * @package system
- * @since 1.0
  */
 
-if(!class_exists('YiiBase', false))
-	require(dirname(__FILE__).'/YiiBase.php');
+// 1) tell Yii where its “system” folder lives
+defined('YII_PATH') or define('YII_PATH', __DIR__);
+
+// 2) load the core class which registers the autoloader for all system.* aliases
+require_once YII_PATH . '/YiiBase.php';
 
 /**
  * Yii is a helper class serving common framework functionalities.
+ * You can extend this class to customize functionality.
  *
- * It encapsulates {@link YiiBase} which provides the actual implementation.
- * By writing your own Yii class, you can customize some functionalities of YiiBase.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
  * @package system
  * @since 1.0
  */

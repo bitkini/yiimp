@@ -66,15 +66,7 @@ return array(
 		),
 
 		'cache'=>array(
-			'class'=>'CMemCache',
-			'keyPrefix'=>'',
-			'servers'=>array(
-				array(
-					'host'=>'127.0.0.1',
-					'port'=> 11211,
-					'weight'=> 60,
-				),
-			),
+			'class'=>'CFileCache'
 		),
 
 	),
